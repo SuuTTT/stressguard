@@ -1,0 +1,3 @@
+_base_: ../stressguard.yaml
+model: {tag: no_cvar}
+train: {loss: {lam_cvar: 0.0}}

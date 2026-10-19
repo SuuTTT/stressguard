@@ -1,0 +1,4 @@
+# trains with the brief's linear L_econ instead of the proper log surrogate
+_base_: ../stressguard.yaml
+model: {tag: linear_surrogate}
+train: {loss: {surrogate: linear}}

@@ -1,0 +1,73 @@
+# StressGuard global defaults. Dataset files override `horizons`/`split`; model files override `model`; CLI --override wins.
+deterministic: true
+device: auto
+
+data:
+  lookback: 64
+  latency: 1            # decision at bar t, hedge filled at close of t + latency
+  exec_max: 4
+  vol_window: 60
+  neg_subsample: 0.25   # TRAIN only
+  num_workers: 0
+
+split:                  # purged, embargoed walk-forward; purge raised to >= max(horizon)+latency+exec_max automatically
+  train: 1500
+  val: 300
+  test: 600
+  step: 600
+  purge: 0
+  embargo: 20
+  anchored: false
+  max_folds: null
+
+cost:                   # shared non-linear cost model: commission + half-spread + sqrt impact (depth-aware) + delay drift
+  commission_bps: 5.0
+  use_half_spread: true
+  impact_eta: 0.1
+  delay_zeta: 0.05
+  notional: 0.05
+
+regime:                 # environment partition E = {Normal, Stress}; quantiles fitted on the TRAIN window of each fold only
+  n_env: 2
+  source: rule          # rule (causal vol/tail/drawdown rule, used for real data) | truth (simulator ground truth, eval-only robustness check)
+  # `tail` (trailing Hill index) is available but lags: a 250-bar window keeps flagging stress long after an episode ends
+  labeler: {vol_window: 20, vol_quantile: 0.9, tail_window: 250, tail_k_frac: 0.1, tail_quantile: 0.1, tail_alpha_crit: 3.0, tail_stride: 1, dd_window: 5, dd_k: 2.5, min_run: 3, use: [vol, dd]}
+  use_calendar: true    # OR the curated calendar in data/stress_splits/<dataset>.json when present
+  calendar_mode: or
+
+context:                # multi-scale regime prior c_t (see stressguard/data/context.py)
+  windows: [5, 20, 60]
+  norm_window: 250
+  corr_window: 20
+  use_extra: true
+
+eval:
+  cost_grid_bps: [1, 5, 10, 30]
+  k_frac: 0.01
+  cost_ratios: [1, 2, 5, 10, 20, 50]
+  n_deciles: 10
+
+train:
+  batch_size: 256
+  epochs: 12
+  lr: 5.0e-4
+  weight_decay: 1.0e-4
+  grad_clip: 1.0
+  patience: 4
+  env_balance: true     # env-balanced sampler so every batch carries Stress samples
+  select: worst_env_econ   # worst_env_econ | mean_econ | stress_auc
+  loss:
+    surrogate: log      # log (proper) | linear (the brief's L_econ exactly)
+    use_sev_weight: true
+    use_gamma_weight: true
+    invariance: irm     # irm | vrex | none
+    lam_irm: 10.0
+    lam_irm_warm: 1.0
+    irm_warmup: 2
+    lam_vrex: 0.0
+    lam_sev: 1.0
+    sev_pos_only: true
+    lam_cvar: 0.1
+    alpha: 0.05
+    pnl_scale: 100.0
+    min_env_samples: 8

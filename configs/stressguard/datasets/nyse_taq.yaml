@@ -1,0 +1,4 @@
+name: nyse_taq
+root: data/raw
+horizons: [1, 5, 15, 30, 60]
+split: {train: 60000, val: 10000, test: 20000, step: 20000, embargo: 390}

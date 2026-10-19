@@ -1,0 +1,3 @@
+_base_: ../stressguard.yaml
+model: {tag: no_irm}
+train: {loss: {invariance: none}}

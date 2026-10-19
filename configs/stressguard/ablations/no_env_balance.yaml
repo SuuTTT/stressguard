@@ -1,0 +1,3 @@
+_base_: ../stressguard.yaml
+model: {tag: no_env_balance}
+train: {env_balance: false}

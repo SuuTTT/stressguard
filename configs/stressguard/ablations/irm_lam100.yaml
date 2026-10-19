@@ -1,0 +1,3 @@
+_base_: ../stressguard.yaml
+model: {tag: irm_lam100}
+train: {loss: {lam_irm: 100.0}}

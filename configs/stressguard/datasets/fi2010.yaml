@@ -1,0 +1,4 @@
+name: fi2010
+root: data/raw
+horizons: [10, 20, 50, 100]
+split: {train: 60000, val: 10000, test: 15000, step: 15000, embargo: 1000}

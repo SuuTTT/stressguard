@@ -1,0 +1,2 @@
+_base_: ../stressguard.yaml
+model: {tag: no_ctx, encoder: {use_ctx: false}}

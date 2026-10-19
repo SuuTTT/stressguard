@@ -1,0 +1,9 @@
+# StressGuard v3: stress-extrapolated channel gating (SECG) + symmetric proper training loss; all cost asymmetry lives in the decision layer
+_base_: stressguard.yaml
+model:
+  tag: sgv3
+  gate: {enabled: true, quantiles: [0.2, 0.4, 0.6, 0.8, 0.9, 0.95], extrap: 0.5, min_calm: 2.0, z_trend: 2.0, power: 1.0}
+train:
+  epochs: 10
+  calibration: platt
+  loss: {c_fn: 1.0, c_fp: 1.0, use_sev_weight: false, use_gamma_weight: false, invariance: none}

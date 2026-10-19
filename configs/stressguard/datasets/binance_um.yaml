@@ -1,0 +1,8 @@
+name: binance_um
+bar_min: 15
+symbols: [BTCUSDT, ETHUSDT, SOLUSDT]
+crash_H: 8
+crash_k: 3.0
+horizons: [1, 2, 4, 8, 16, 32]
+split: {train: 12000, val: 2000, test: 4000, step: 4000, embargo: 96}
+root_binance: /home/sudingli/cq-home/stressguard/data/from-c225/binance_um_5m

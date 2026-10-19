@@ -1,0 +1,12 @@
+_base_: default.yaml
+model:
+  name: stressguard
+  tag: stressguard
+  tau: 10                       # hedge holding horizon (bars); crash severity = worst drawdown within tau
+  horizons: [1, 2, 3, 5, 10, 20]
+  sev_taus: [0.25, 0.5, 0.75, 0.9]
+  sev_scale: 0.01
+  use_sev_head: true
+  encoder: {d_model: 128, n_heads: 4, patch_len: 8, stride: 4, price_layers: 2, dropout: 0.1, use_lob: true, use_ctx: true, film_hidden: 64}
+  decision: {dynamic: true, c_fn: 5.0, c_fp: 1.0, h_max: 1.0, sev_q_index: 1, sev_plugin_k: 2.0, static_temp: 0.05}
+  ablation: {}

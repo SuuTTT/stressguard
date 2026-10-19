@@ -1,0 +1,4 @@
+# invariant-signal degradation sweep: OFI noise std = 1 + noise_mult * u (0 = precursor SNR unchanged under stress)
+_base_: synthetic_regime.yaml
+name: synthetic_regime
+noise_mult: 0.0

@@ -1,0 +1,4 @@
+# severity plug-in k * sigma * sqrt(tau) instead of the learned quantile head
+_base_: ../stressguard.yaml
+model: {tag: no_sev_head, use_sev_head: false}
+train: {loss: {lam_sev: 0.0}}

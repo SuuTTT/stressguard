@@ -1,0 +1,4 @@
+name: flashcrash_bench
+root: data/raw
+horizons: [1, 5, 15, 30, 60]
+split: {train: 3000, val: 400, test: 800, step: 800, embargo: 60}

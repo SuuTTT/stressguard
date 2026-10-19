@@ -1,0 +1,2 @@
+_base_: ../stressguard_v4.yaml
+model: {tag: sgv4_z3, gate: {z_trend: 3.0}}

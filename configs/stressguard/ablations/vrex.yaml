@@ -1,0 +1,3 @@
+_base_: ../stressguard.yaml
+model: {tag: vrex}
+train: {loss: {invariance: vrex, lam_vrex: 10.0}}

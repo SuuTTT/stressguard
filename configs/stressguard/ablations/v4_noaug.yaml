@@ -1,0 +1,2 @@
+_base_: ../stressguard_v4.yaml
+model: {tag: sgv4_noaug, encoder: {aug_channel_p: 0.0}}

@@ -1,0 +1,4 @@
+name: lobster_sg
+root: data/raw
+horizons: [10, 20, 50, 100, 300, 600]
+split: {train: 150000, val: 20000, test: 30000, step: 30000, embargo: 2000}

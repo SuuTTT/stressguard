@@ -1,0 +1,2 @@
+_base_: ../stressguard_v3.yaml
+model: {tag: sgv3_nogate, gate: {enabled: false}}

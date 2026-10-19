@@ -1,0 +1,8 @@
+# StressGuard v4: ERM detector + channel-attenuation augmentation + stress-adaptive test-time suppression of drifting channels.
+# Calm bars see the full ERM model; a channel is shrunk toward its training mean only in proportion to how much its fitted
+# association is predicted to fade at that bar's own stress level (significance-tested trend, training bars only).
+_base_: ablations/erm.yaml
+model:
+  tag: sgv4
+  encoder: {use_ctx: false, adaptive_gate: true, aug_channel_p: 0.5}
+  gate: {enabled: true, mode: adaptive, quantiles: [0.2, 0.4, 0.6, 0.8, 0.9, 0.95], min_calm: 2.0, z_trend: 2.0}

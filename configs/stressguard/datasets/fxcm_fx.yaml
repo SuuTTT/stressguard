@@ -1,0 +1,4 @@
+name: fxcm_fx
+root: data/raw
+horizons: [1, 5, 15, 30, 60]
+split: {train: 80000, val: 10000, test: 20000, step: 20000, embargo: 1440}

@@ -1,0 +1,4 @@
+# ERM same-backbone detector: symmetric BCE, no invariance penalty, no context prior, static F1-tuned threshold. The "collapse" baseline.
+_base_: ../stressguard.yaml
+model: {tag: erm, use_sev_head: false, encoder: {use_ctx: false}, decision: {dynamic: false}}
+train: {epochs: 10, env_balance: false, select: mean_econ, loss: {c_fn: 1.0, c_fp: 1.0, use_sev_weight: false, use_gamma_weight: false, invariance: none, lam_sev: 0.0, lam_cvar: 0.0}}

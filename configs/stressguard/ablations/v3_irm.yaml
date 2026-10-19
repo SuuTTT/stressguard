@@ -1,0 +1,4 @@
+_base_: ../stressguard_v3.yaml
+model: {tag: sgv3_irm}
+regime: {irm_quantiles: [0.5, 0.8, 0.95]}
+train: {loss: {invariance: irm, label_balance_env: true}}

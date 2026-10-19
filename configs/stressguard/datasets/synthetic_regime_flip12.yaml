@@ -1,0 +1,4 @@
+# spurious-flip sweep: beta(u) = sp_beta0 * (1 - sp_flip * u); larger sp_flip = stronger sign flip of the shortcut under stress
+_base_: synthetic_regime.yaml
+name: synthetic_regime
+sp_flip: 1.2

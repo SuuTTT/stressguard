@@ -1,0 +1,4 @@
+# symmetric training loss (plain BCE) but keeps IRM, context and the dynamic decision rule
+_base_: ../stressguard.yaml
+model: {tag: no_econ}
+train: {loss: {c_fn: 1.0, c_fp: 1.0, use_sev_weight: false, use_gamma_weight: false}}

@@ -1,0 +1,26 @@
+# v1 defaults: the invariant precursor (ofi) is as strong as the shortcut (sp) in calm markets and the shortcut flips under stress.
+# v0 (ofi_strength 1.0, sp_beta0 1.2) is archived under results/stressguard_simv0: there the precursor's SNR under stress is too low
+# for any invariant detector to beat ERM within stress (docs/stressguard_paper_design.md, section 10).
+name: synthetic_regime
+seed: 0
+T: 6000
+N: 12
+lead: 3
+warmup: 300
+episode_severities: [0.35, 0.9, 0.55, 1.0, 0.45, 0.85, 0.6, 0.95]
+episode_gap: [350, 650]
+episode_len: [40, 120]
+vol_mult: 3.0
+spread_mult: 6.0
+jump_rate: 0.004
+jump_mult: 12.0
+hawkes_alpha: 0.3
+hawkes_beta: 0.5
+crash_thr: 3.0
+ofi_strength: 2.0
+noise_mult: 0.5
+sp_beta0: 2.0
+sp_flip: 1.6
+skew_lead: 5
+horizons: [1, 2, 3, 5, 10, 20]
+split: {train: 1500, val: 300, test: 600, step: 600, embargo: 20}

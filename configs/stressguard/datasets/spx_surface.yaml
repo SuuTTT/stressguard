@@ -1,0 +1,4 @@
+name: spx_surface
+root: data/raw
+horizons: [1, 2, 3, 5, 10, 20]
+split: {train: 1500, val: 250, test: 500, step: 500, embargo: 20}
