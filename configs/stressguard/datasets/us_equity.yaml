@@ -5,4 +5,4 @@ crash_H: 10
 crash_k: 2.5
 horizons: [1, 2, 3, 5, 10, 20]
 split: {train: 2500, val: 500, test: 750, step: 750, embargo: 20}
-fred_roots: [/home/sudingli/cq-home/stressguard/data/from-c225/fred]
+fred_roots: [/home/sudingli/cq-home/stressguard/data/fred]

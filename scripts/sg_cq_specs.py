@@ -3,7 +3,7 @@
 
     python3 scripts/sg_cq_specs.py --work StressGuard --commit <sha> --out specs/ [--seeds 42] [--smoke-id j-...]
 Each job: CPU-only (gpus 0, cpus 2, ram_gb 4), writes only to $CQ_OUTPUT_DIR, prints n/N progress to run.log, and declares every
-fold json in outputs.expect. Code from github.com/SuuTTT/stressguard (code.git); project home /home/sudingli/cq-home/stressguard on c224 (cq copies it to the job host).
+fold json in outputs.expect. Code from github.com/SuuTTT/stressguard (code.git); project home /home/sudingli/cq-home/stressguard on c225 (cq copies it to the job host).
 """
 import argparse, json, os
 H = "/home/sudingli/cq-home/stressguard"
@@ -25,7 +25,7 @@ def spec(work, commit, batch, name, ds, tag, seed, cmd, nfolds, ram=4, hours=2.0
     s = {"name": f"stressguard {batch}: {name}", "work": work, "python": PY,
          "command": ["bash", "-lc", shell],
          "code": {"git": "SuuTTT/stressguard", "commit": commit},
-         "home": {"name": "stressguard", "from": "c224"},
+         "home": {"name": "stressguard", "from": "c225"},
          "resources": {"gpus": 0, "cpus": 2, "ram_gb": ram},
          "limits": {"max_hours": hours, "max_attempts": 2},
          "outputs": {"dest": f"{H}/results/{batch}/{run}", "expect": [{"path": f"{run}/fold{k}.json"} for k in range(nfolds)],
