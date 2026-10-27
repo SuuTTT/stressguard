@@ -1,0 +1,5 @@
+_base_: ablations/erm.yaml
+model:
+  tag: sgv5
+  encoder: {use_ctx: false, adaptive_gate: false, aug_channel_p: 0.0, aug_target: true, aug_kappa: 1.3862944, aug_target_p: 0.8}
+  gate: {enabled: true, mode: adaptive, quantiles: [0.2, 0.4, 0.6, 0.8, 0.9, 0.95], min_calm: 2.0, z_trend: 2.0}

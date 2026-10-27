@@ -15,7 +15,9 @@ MODELS = {"erm": "configs/stressguard/ablations/erm.yaml", "sgv1": "configs/stre
           "sgv3_regcal": "configs/stressguard/ablations/v3_regcal.yaml", "sgv3_econ": "configs/stressguard/ablations/v3_econ.yaml",
           "sgv3_ex1": "configs/stressguard/ablations/v3_extrap1.yaml", "sgv3_ex2": "configs/stressguard/ablations/v3_extrap2.yaml",
           "sgv4": "configs/stressguard/stressguard_v4.yaml", "sgv4_noaug": "configs/stressguard/ablations/v4_noaug.yaml",
-          "sgv4_augonly": "configs/stressguard/ablations/v4_augonly.yaml", "sgv4_z3": "configs/stressguard/ablations/v4_z3.yaml"}
+          "sgv4_augonly": "configs/stressguard/ablations/v4_augonly.yaml", "sgv4_z3": "configs/stressguard/ablations/v4_z3.yaml",
+          "sgv5": "configs/stressguard/stressguard_v5.yaml", "sgv5_uni": "configs/stressguard/ablations/v5_uni.yaml",
+          "sgv5_k8": "configs/stressguard/ablations/v5_k8.yaml", "sgv5_z1": "configs/stressguard/ablations/v5_z1.yaml"}
 BASELINES = ["zscore", "iforest", "recon_ae", "dlinear_recon", "anomaly_transformer", "tranad", "dcdetector", "timesnet"]
 
 
@@ -45,8 +47,8 @@ def main():
     a.add_argument("--smoke-deps", nargs="*", default=[], help="job ids the smoke job waits for (env build, data copy)")
     o = a.parse_args()
     os.makedirs(o.out, exist_ok=True)
-    smoke = spec(o.work, o.commit, "smoke", "sgv3 synthetic fold0 2 epochs", "synthetic_regime", "sgv3", 42,
-                 "scripts/sg_train.py --device cpu --config configs/stressguard/stressguard_v3.yaml --dataset synthetic_regime --seed 42 --folds 0 --tag sgv3 --override train.epochs=2",
+    smoke = spec(o.work, o.commit, "smoke", "sgv5 synthetic fold0 2 epochs", "synthetic_regime", "sgv5", 42,
+                 "scripts/sg_train.py --device cpu --config configs/stressguard/stressguard_v5.yaml --dataset synthetic_regime --seed 42 --folds 0 --tag sgv5 --override train.epochs=2",
                  1, ram=4, hours=0.5)
     if o.smoke_deps:
         smoke["depends_on"] = list(o.smoke_deps)

@@ -1,0 +1,2 @@
+_base_: ../stressguard_v5.yaml
+model: {tag: sgv5_k8, encoder: {aug_kappa: 2.0794415}}

@@ -1,0 +1,2 @@
+_base_: ../stressguard_v5.yaml
+model: {tag: sgv5_uni, encoder: {aug_channel_p: 0.5}}

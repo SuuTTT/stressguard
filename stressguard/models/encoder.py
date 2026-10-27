@@ -52,6 +52,10 @@ class InvariantEncoder(nn.Module):
         self.register_buffer("ad_mu", torch.zeros(Fp))
         self.adaptive = bool(cfg.get("adaptive_gate", False))
         self.aug_p = float(cfg.get("aug_channel_p", 0.0))
+        # v5 counterfactual stress amplification (training only): s' = s * exp(U(0, kappa)), flagged channels scaled by beta(s')/beta(s)
+        self.aug_target = bool(cfg.get("aug_target", False))
+        self.aug_kappa = float(cfg.get("aug_kappa", 1.3862944))          # log 4: up to 4x the observed stress
+        self.aug_target_p = float(cfg.get("aug_target_p", 0.8))
 
     def set_gate(self, g) -> None:
         self.in_gate.copy_(torch.as_tensor(g, dtype=self.in_gate.dtype))
@@ -61,16 +65,32 @@ class InvariantEncoder(nn.Module):
         self.ad_a.copy_(f("intercept")); self.ad_b.copy_(f("trend")); self.ad_beta0.copy_(f("beta_calm"))
         self.ad_mask.copy_(f("mask", torch.bool)); self.ad_mu.copy_(f("mu"))
 
-    def adaptive_gate(self, batch: Dict[str, torch.Tensor]) -> torch.Tensor:
-        s = batch.get("stress_score")
-        ls = torch.log(s.clamp_min(1e-3)) if s is not None else torch.zeros(batch["price"].shape[0], device=self.ad_a.device)
+    def _gate_at(self, ls: torch.Tensor) -> torch.Tensor:
         beta0 = torch.where(self.ad_beta0.abs() > 1e-6, self.ad_beta0, torch.ones_like(self.ad_beta0))
         g = ((self.ad_a + self.ad_b * ls[:, None]) / beta0).clamp(0.0, 1.0)            # (B, F)
         return torch.where(self.ad_mask, g, torch.ones_like(g))
 
+    def adaptive_gate(self, batch: Dict[str, torch.Tensor]) -> torch.Tensor:
+        s = batch.get("stress_score")
+        ls = torch.log(s.clamp_min(1e-3)) if s is not None else torch.zeros(batch["price"].shape[0], device=self.ad_a.device)
+        return self._gate_at(ls)
+
+    def stress_amplify(self, x: torch.Tensor, batch: Dict[str, torch.Tensor], mu: torch.Tensor) -> torch.Tensor:
+        s = batch.get("stress_score")
+        if s is None or not bool(self.ad_mask.any()):
+            return x
+        B = x.shape[0]
+        ls = torch.log(s.clamp_min(1e-3))
+        ls2 = ls + torch.rand(B, device=x.device) * self.aug_kappa
+        r = (self._gate_at(ls2) / self._gate_at(ls).clamp_min(1e-3)).clamp(0.0, 1.0)   # beta(s')/beta(s) on flagged channels
+        r = torch.where(torch.rand(B, 1, device=x.device) < self.aug_target_p, r, torch.ones_like(r))
+        return mu + r[:, None, :] * (x - mu)
+
     def forward(self, batch: Dict[str, torch.Tensor]) -> torch.Tensor:
         x = batch["price"] * self.in_gate
         mu = self.ad_mu.view(1, 1, -1)
+        if self.training and self.aug_target:
+            x = self.stress_amplify(x, batch, mu)
         if self.training and self.aug_p > 0:
             B, _, F = x.shape
             g = torch.where(torch.rand(B, 1, F, device=x.device) < self.aug_p, torch.rand(B, 1, F, device=x.device), torch.ones(B, 1, F, device=x.device))
